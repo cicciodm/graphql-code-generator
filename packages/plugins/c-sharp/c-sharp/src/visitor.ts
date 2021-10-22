@@ -120,14 +120,14 @@ public class CompositionTypeConverter : JsonConverter
   {
     if (reader.TokenType == JsonToken.Null)
     {
-        return null;
+      return null;
     }
 
     var loadedObject = JObject.Load(reader);
     var typeNameObject = loadedObject["__typename"];
     if (typeNameObject == null)
     {
-        throw new JsonWriterException($"CompositionTypeConverter Exception: missing __typeName field when parsing {objectType.Name}. Requesting the __typename field is required for converting Composition Types");
+      throw new JsonWriterException($"CompositionTypeConverter Exception: missing __typeName field when parsing {objectType.Name}. Requesting the __typename field is required for converting Composition Types");
     }
     var typeName = typeNameObject.Value<string>();
 
@@ -141,13 +141,13 @@ public class CompositionTypeConverter : JsonConverter
   /// <inheritdoc />
   public override bool CanConvert(Type objectType)
   {
-      throw new NotImplementedException();
+    throw new NotImplementedException();
   }
 
   /// <inheritdoc />
   public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
   {
-      throw new NotImplementedException("Tried to write a GQL Composition type to JSON");
+    throw new NotImplementedException("Tried to write a GQL Composition type to JSON");
   }
 }
 
@@ -161,7 +161,7 @@ public class CompositionTypeListConverter : JsonConverter
   {
     if (reader.TokenType == JsonToken.Null)
     {
-        return null;
+      return null;
     }
 
     var items = JArray.Load(reader).Children();
@@ -172,7 +172,7 @@ public class CompositionTypeListConverter : JsonConverter
       var typeNameObject = item["__typename"];
       if (typeNameObject == null)
       {
-          throw new JsonWriterException($"CompositionTypeListConverter Exception: missing __typeName field when parsing {objectType.Name}. Requesting the __typename field is required for converting Composition Types");
+        throw new JsonWriterException($"CompositionTypeListConverter Exception: missing __typeName field when parsing {objectType.Name}. Requesting the __typename field is required for converting Composition Types");
       }
       var typeName = typeNameObject.Value<string>();
 
@@ -189,13 +189,13 @@ public class CompositionTypeListConverter : JsonConverter
   /// <inheritdoc />
   public override bool CanConvert(Type objectType)
   {
-      throw new NotImplementedException();
+    throw new NotImplementedException();
   }
 
   /// <inheritdoc />
   public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
   {
-      throw new NotImplementedException("Tried to write a GQL Composition type list to JSON");
+    throw new NotImplementedException("Tried to write a GQL Composition type list to JSON");
   }
 }
 `;
