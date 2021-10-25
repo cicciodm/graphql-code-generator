@@ -110,4 +110,16 @@ export interface CSharpResolversPluginRawConfig extends RawConfig {
    * ```
    */
   jsonAttributesSource?: JsonAttributesSource;
+  /**
+   * @description Configures aditional types from your GraphQL schema to receive the JsonConverter Attribute.
+   * @exampleMarkdown
+   * ## With Custom Values
+   * ```yml
+   *   config:
+   *     attributes:
+   *       additionalCompositionTypes:
+   *         - cs-Type
+   * ```
+   */
+  additionalCompositionTypes?: Set<string>;
 }

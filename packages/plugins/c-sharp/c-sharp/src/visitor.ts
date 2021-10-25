@@ -56,6 +56,7 @@ export interface CSharpResolverParsedConfig extends ParsedConfig {
   emitRecords: boolean;
   emitJsonAttributes: boolean;
   jsonAttributesSource: JsonAttributesSource;
+  additionalCompositionTypes: Set<string>;
 }
 
 export class CSharpResolversVisitor extends BaseVisitor<CSharpResolversPluginRawConfig, CSharpResolverParsedConfig> {
@@ -200,6 +201,8 @@ public class CompositionTypeListConverter : JsonConverter
 }
 `;
 
+  private readonly additionalCompositionTypes: Set<string>;
+
   constructor(
     rawConfig: CSharpResolversPluginRawConfig,
     private _schema: GraphQLSchema,
@@ -214,6 +217,7 @@ public class CompositionTypeListConverter : JsonConverter
       emitJsonAttributes: rawConfig.emitJsonAttributes ?? true,
       jsonAttributesSource: rawConfig.jsonAttributesSource || 'Newtonsoft.Json',
       scalars: buildScalarsFromConfig(_schema, rawConfig, C_SHARP_SCALARS),
+      additionalCompositionTypes: new Set(rawConfig.additionalCompositionTypes),
     });
 
     if (this._parsedConfig.emitJsonAttributes) {
@@ -222,6 +226,7 @@ public class CompositionTypeListConverter : JsonConverter
 
     this.compositionTypeToImplementationsMap = compositionTypesData.compositionTypeToImplementationsMap;
     this.compositionTypeNames = compositionTypesData.compositionTypeNames;
+    this.additionalCompositionTypes = new Set(rawConfig.additionalCompositionTypes);
   }
 
   public getImports(): string {
@@ -356,7 +361,10 @@ public class CompositionTypeListConverter : JsonConverter
     ) {
       const baseNode = getBaseTypeNode(node.type);
 
-      if (this.compositionTypeNames.has(baseNode.name.value)) {
+      if (
+        this.compositionTypeNames.has(baseNode.name.value) ||
+        this.additionalCompositionTypes.has(baseNode.name.value)
+      ) {
         attributes.push(
           isOfTypeList(node.type) ? this.compositionTypeListConverterTag : this.compositionTypeConverterTag
         );
